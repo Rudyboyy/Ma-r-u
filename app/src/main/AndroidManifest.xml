@@ -10,11 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaRéu">
         <activity
+            android:name=".ui.DetailMeetingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AddMeetingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            ><!--            android:theme="@style/Theme.AppCompat.NoActionBar"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -6,8 +6,16 @@
         <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/drawable/circle.xml" value="0.2315" />
         <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/drawable/icon_app.xml" value="0.1" />
         <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/activity_add_meeting.xml" value="0.36666666666666664" />
-        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/activity_detail_meeting.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/fragment_blank.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/fragment_room_dialog.xml" value="0.36666666666666664" />
         <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/item_meeting.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/list_test.xml" value="0.17831813576494426" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/room_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/layout/rooms_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/dossier bureau/Openclassrooms/AndroidStudioProjects/Maru/app/src/main/res/menu/menu.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

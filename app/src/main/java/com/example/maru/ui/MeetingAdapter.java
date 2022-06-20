@@ -1,11 +1,13 @@
 package com.example.maru.ui;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,11 +21,18 @@ import java.util.ArrayList;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
 
-    private final ArrayList<Meeting> mMeetings;
-    private final MeetingApiService mMeetingApiService = DI.getMeetingApiService();
+    private ArrayList<Meeting> mMeetings;
+    private final IOnMeetingDeleted deleteMeeting;
 
-    public MeetingAdapter(ArrayList<Meeting> meetings) {
+    public MeetingAdapter(ArrayList<Meeting> meetings, IOnMeetingDeleted deleteMeeting) {
         this.mMeetings = meetings;
+        this.deleteMeeting = deleteMeeting;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        mMeetings = meetings;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -36,9 +45,20 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.displayMeeting(mMeetings.get(position));
-        holder.deleteButton.setOnClickListener(view -> mMeetingApiService.deleteMeeting(mMeetings.get(position)));//todo fonctionne pas
+        Meeting meeting = mMeetings.get(position);
+        holder.displayMeeting(meeting);
+        holder.deleteButton.setOnClickListener(view -> {
+            deleteMeeting.onDeleteMeeting(meeting);
+        });
+
+/*        holder.itemView.setOnClickListener(view -> {
+
+            Intent detailMeetingActivityIntent = new Intent(mContext, DetailMeetingActivity.class);
+            detailMeetingActivityIntent.putExtra(MEETING_INFO, mMeetings);
+            mContext.startActivity(detailMeetingActivityIntent);
+        });*/
     }
+
 
     @Override
     public int getItemCount() {
@@ -63,7 +83,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         public void displayMeeting(Meeting meeting) {
 //            SimpleTimeZone simpleTimeZone = new SimpleTimeZone()
             meetingInfo.setText(meeting.getMeetingTopic()+" - "+meeting.getTime()+" - "+meeting.getMeetingRoom());
-            attendees.setText(meeting.getAttendees());
+            attendees.setText(meeting.getAttendeesNames());
         }
     }
 }
