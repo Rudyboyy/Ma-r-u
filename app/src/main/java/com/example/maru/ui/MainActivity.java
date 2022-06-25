@@ -3,6 +3,7 @@ package com.example.maru.ui;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -20,19 +22,24 @@ import com.example.maru.R;
 import com.example.maru.databinding.ActivityMainBinding;
 import com.example.maru.di.DI;
 import com.example.maru.model.Meeting;
+import com.example.maru.model.MeetingRoom;
 import com.example.maru.service.MeetingApiService;
 import com.example.maru.ui.dialog.RoomDialogFragment;
 
+import java.sql.Date;
+import java.time.Clock;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted {
+public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted, RoomDialogFragment.OnPositiveButtonClickListener {
 
     private ActivityMainBinding binding;
     private ArrayList<Meeting> mMeetingList = new ArrayList<>();
     private final MeetingApiService mMeetingApiService = DI.getMeetingApiService();
-//    public static final String MEETING_INFO = "meetingInfo";//todo rajout
-    MeetingAdapter mMeetingAdapter;
+    //    public static final String MEETING_INFO = "meetingInfo";//todo rajout
+    private MeetingAdapter mMeetingAdapter;
     private int lastSelectedHour = -1;
     private int lastSelectedMinute = -1; //todo rajout
 
@@ -47,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        initToolbar();
         setButton();
         initRecyclerView();
     }
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
         return true;
     }
 
-/*    @Override//todo avec switch au lieu de if
+/*    @Override//todo avec switch au lieu de if ??
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.time_filter:
@@ -94,27 +102,39 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
         }
     }*/
 
-// initialise la methode sur l'item cliqué
-@Override
-public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    if (item.getItemId() == R.id.time_filter) {
-        timeDialog();
-        return true;
+    // initialise la methode sur l'item cliqué
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//todo faire switch
+        if (item.getItemId() == R.id.time_filter) {
+            timeDialog();
+            return true;
+        } else if (item.getItemId() == R.id.reset_filter) {
+            resetDialog();
+            return true;
+        } else if (item.getItemId() == R.id.room_filter) {
+            roomDialog();
+            return true;
+        } else if (item.getItemId() == R.id.chrono_filter) {
+            chronoDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
-    else if (item.getItemId() == R.id.reset_filter) {
-        resetDialog();
-        return true;
+
+    private void chronoDialog() {
+        mMeetingList.clear();
+        mMeetingList.addAll(mMeetingApiService.getMeetingsInChronologicalOrder());
+        if (binding.recyclerView.getAdapter() == null) return;
+        binding.recyclerView.getAdapter().notifyDataSetChanged();
     }
-    else if (item.getItemId() == R.id.room_filter) {
-        roomDialog();
-        return true;
-    }
-    return super.onOptionsItemSelected(item);
-}
+
+//todo probleme chaque filtre reset le filtre d'avant !!
 
     private void roomDialog() {
         RoomDialogFragment filterDialog = new RoomDialogFragment();
         filterDialog.show(getSupportFragmentManager(), "Room");
+        if (binding.recyclerView.getAdapter() == null) return;
+        binding.recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private void resetDialog() {
@@ -125,7 +145,7 @@ public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     }
 
     private void timeDialog() {
-        if(this.lastSelectedHour == -1)  {
+        if (this.lastSelectedHour == -1) {
             final Calendar c = Calendar.getInstance();
             this.lastSelectedHour = c.get(Calendar.HOUR_OF_DAY);
             this.lastSelectedMinute = c.get(Calendar.MINUTE);
@@ -134,14 +154,14 @@ public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //pour override le onTimeSet
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) { // todo prend que si on met l'heure exact
                 lastSelectedHour = hourOfDay;
                 lastSelectedMinute = minute;
-                Calendar cal = Calendar.getInstance();
-                cal.set(hourOfDay, minute);
+                LocalTime time = LocalTime.of(hourOfDay, minute);
                 mMeetingList.clear();
-//                mMeetingList.addAll(mMeetingApiService.getMeetingsFilterByTime(cal.getTime()));
+                mMeetingList.addAll(mMeetingApiService.getMeetingsByTime(time)); //todo rajout
                 if (binding.recyclerView.getAdapter() == null) return;
                 binding.recyclerView.getAdapter().notifyDataSetChanged();
             }
@@ -149,35 +169,20 @@ public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         TimePickerDialog timePickerDialog;//todo = null; ??
 
-            timePickerDialog = new TimePickerDialog(this,
+        timePickerDialog = new TimePickerDialog(this,
 //                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                    timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
+                timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
 
         timePickerDialog.show();
 
     }
 
-/*    public ArrayList<Meeting> getMeetingFilterByTime(LocalTime time) {
-        ArrayList<Meeting> result = new ArrayList<>();
-        for (int i = 0; i < mMeetingList.size(); i++) {
-            if (mMeetingList.get(i).getTime() == time) {
-                result.add(mMeetingList.get(i));
-            }
+    @Override
+    public void onButtonClicked(MeetingRoom room) {
+        if (room != null) {
+            mMeetingList.clear();
+            mMeetingList.addAll(mMeetingApiService.getMeetingByRoom(room));//todo rajout
+            binding.recyclerView.getAdapter().notifyDataSetChanged();
         }
-        return result;
-    }*/
+    }
 }
-/*    @Override
-    public ArrayList<Meeting> getMeetingFilterByTime(LocalDateTime time) {
-        ArrayList<Meeting> result = new ArrayList<>();
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(time);
-        for (int i = 0; i < meetings.size(); i++) {
-            Calendar cal2 = Calendar.getInstance();
-            cal2.setTime(meetings.get(i).getTime());
-            boolean sameDay = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY) &&
-                    cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE);
-            if (sameDay) result.add(meetings.get(i));
-        }
-        return result;
-    }*/

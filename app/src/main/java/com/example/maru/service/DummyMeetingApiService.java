@@ -12,10 +12,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.O)//todo enlever
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class DummyMeetingApiService implements MeetingApiService {
     List<Meeting> meetings = DummyMeetingGenerator.generateMeetings();
 
@@ -35,25 +37,68 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public ArrayList<Meeting> getMeetingByRoom(MeetingRoom room) {
-        ArrayList<Meeting> result = new ArrayList<>();
+    public List<Meeting> getMeetingByRoom(MeetingRoom room) {
+        List<Meeting> result = new ArrayList<>();
         for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getMeetingRoom() == room) {
+                result.add(meetings.get(i));
+            }
         }
         return result;
     }
 
-/*    @Override
-    public ArrayList<Meeting> getMeetingsFilterByTime(LocalTime time) {
-        ArrayList<Meeting> result = new ArrayList<>();
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(time);
+    @Override
+    public MeetingRoom getMeetingRoomByName(String name) {
         for (int i = 0; i < meetings.size(); i++) {
-            Calendar cal2 = Calendar.getInstance();
-            cal2.setTime(meetings.get(i).getTime());
-            boolean sameDay = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY) &&
-                    cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE);
-            if (sameDay) result.add(meetings.get(i));
+            if (meetings.get(i).getMeetingRoom().getName().equals(name)) {
+                return meetings.get(i).getMeetingRoom();
+            }
+        }
+        return null;
+    }
+
+   /* @Override
+    public List<Meeting> getMeetingsInChronologicalOrder() {//todo fonctionne pas
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int h = 0; h < 24; h++) {
+            for (int i = 0; i < meetings.size(); i++) {
+                if (meetings.get(i).getTime().isBefore(LocalTime.of(h, 0))) {
+                    result.add(meetings.get(i));
+                }
+            }
         }
         return result;
     }*/
+
+    @Override
+    public List<Meeting> getMeetingsInChronologicalOrder() {// todo faire test sur mobile
+        Collections.sort(meetings, new Comparator<Meeting>() {
+            @Override
+            public int compare(Meeting meeting, Meeting t1) {
+                return 0;
+            }
+        });
+        ArrayList<Meeting> result = new ArrayList<>();
+        int h = LocalTime.MIDNIGHT.plusHours(1).getHour();
+        while (h != LocalTime.MIDNIGHT.minusHours(1).getHour()) {
+            for (int i = 0; i < meetings.size(); i++) {
+                    if (h == meetings.get(i).getTime().getHour()) {
+                        result.add(meetings.get(i));
+                    }
+                    h++;
+                }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsByTime(LocalTime time) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getTime().isBefore(time.plusHours(1)) && meetings.get(i).getTime().isAfter(time) || meetings.get(i).getTime().equals(time)) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
 }

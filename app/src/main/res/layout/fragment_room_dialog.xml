@@ -8,13 +8,12 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <AutoCompleteTextView
+    <Spinner
         android:id="@+id/room_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="Room"
-        android:cursorVisible="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +21,6 @@
         style="@style/Widget.AppCompat.Spinner.Underlined" >
 
         <requestFocus /> <!--todo voir se que ca change-->
-    </AutoCompleteTextView>
+    </Spinner>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

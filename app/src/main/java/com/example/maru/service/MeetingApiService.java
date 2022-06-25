@@ -16,7 +16,11 @@ public interface MeetingApiService {
 
     void createMeeting(Meeting meeting);
 
-//    ArrayList<Meeting> getMeetingsFilterByTime(LocalTime time);
+    List<Meeting> getMeetingsByTime(LocalTime time);//todo rajout
 
-    ArrayList<Meeting> getMeetingByRoom(MeetingRoom room);
+    List<Meeting> getMeetingByRoom(MeetingRoom room);//todo rajout
+
+    MeetingRoom getMeetingRoomByName(String name);
+
+    List<Meeting> getMeetingsInChronologicalOrder();
 }
