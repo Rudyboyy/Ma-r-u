@@ -10,6 +10,7 @@
     <string name="save">save</string>
 
     <string-array name="rooms">
+        <item>room</item>
         <item>akali</item>
         <item>yasuo</item>
         <item>sion</item>

@@ -17,33 +17,15 @@ public class Meeting implements Serializable {
     private MeetingRoom meetingRoom;
     private String meetingTopic;
     private ArrayList<Employee> attendees;
-    private LocalTime mTime;
-    private int minute;
-    private int hour;
-
-@RequiresApi(api = Build.VERSION_CODES.O)
-public static LocalTime getRandomMeetingHour() {
-    int hour = new Random().nextInt(24);
-    int minutes = new Random().nextInt(60);
-
-    return LocalTime.of(hour, minutes);
-}
-/*        public static void main(String[] args) {
-            SimpleDateFormat formater = null;
-
-            Date aujourdhui = new Date();
-
-            formater = new SimpleDateFormat("HH:mm");
-            System.out.println(formater.format(aujourdhui));
-        }*///todo test
+    private Date mDate;
 
     protected static final SimpleDateFormat dateHeureFormat =
-            new SimpleDateFormat("hh:mm");//todo test
+            new SimpleDateFormat("hh:mm");//todo test metre dans utils
 
 
     public static String formatterDateHeure(Date date) {
         return dateHeureFormat.format(date);
-    }//todo test
+    }//todo test metre dans utils
 
     public long getId() {
         return id;
@@ -73,22 +55,26 @@ public static LocalTime getRandomMeetingHour() {
         this.attendees = attendees;
     }
 
-    public LocalTime getTime() {
-        return mTime;
+    public String getTime() {
+        return formatterDateHeure(mDate);
     }
 
-    public void setTime(LocalTime time) {
-        mTime = time;
+    public Date getDate() {
+        return mDate;
+    }
+
+    public void setTime(Date time) {
+        mDate = time;
     }
 
 
-    public Meeting(long id, String topic, LocalTime time, MeetingRoom room, ArrayList<Employee> attendees) {
+    public Meeting(long id, String topic, Date time, MeetingRoom room, ArrayList<Employee> attendees) {
 
         this.id = id;
         this.meetingTopic = topic;
         this.meetingRoom = room;
         this.attendees = attendees;
-        mTime = time;
+        mDate = time;
     }
 
     public String getAttendeesNames() {

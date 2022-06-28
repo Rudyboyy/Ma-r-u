@@ -1,15 +1,8 @@
 package com.example.maru.service;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -17,7 +10,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class DummyMeetingApiService implements MeetingApiService {
     List<Meeting> meetings = DummyMeetingGenerator.generateMeetings();
 
@@ -57,19 +49,6 @@ public class DummyMeetingApiService implements MeetingApiService {
         return null;
     }
 
-   /* @Override
-    public List<Meeting> getMeetingsInChronologicalOrder() {//todo fonctionne pas
-        ArrayList<Meeting> result = new ArrayList<>();
-        for (int h = 0; h < 24; h++) {
-            for (int i = 0; i < meetings.size(); i++) {
-                if (meetings.get(i).getTime().isBefore(LocalTime.of(h, 0))) {
-                    result.add(meetings.get(i));
-                }
-            }
-        }
-        return result;
-    }*/
-
     @Override
     public List<Meeting> getMeetingsInChronologicalOrder() {// todo faire test sur mobile
         Collections.sort(meetings, new Comparator<Meeting>() {
@@ -79,7 +58,7 @@ public class DummyMeetingApiService implements MeetingApiService {
             }
         });
         ArrayList<Meeting> result = new ArrayList<>();
-        int h = LocalTime.MIDNIGHT.plusHours(1).getHour();
+        /*int h = LocalTime.MIDNIGHT.plusHours(1).getHour();
         while (h != LocalTime.MIDNIGHT.minusHours(1).getHour()) {
             for (int i = 0; i < meetings.size(); i++) {
                     if (h == meetings.get(i).getTime().getHour()) {
@@ -87,17 +66,50 @@ public class DummyMeetingApiService implements MeetingApiService {
                     }
                     h++;
                 }
+        }*/
+        return null;
+    }
+
+    @Override
+    public List<Meeting> getMeetingByFilter(java.util.Date date, MeetingRoom room, Date time) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        if (date != null && room != null && time != null) {
+            result = new ArrayList<Meeting>() {{addAll(getMeetingsByDate(date));addAll(getMeetingByRoom(room));addAll(getMeetingsByTime(time));}};
+        } else if (room != null) {
+            result.addAll(getMeetingByRoom(room));
+        } else if (date != null) {
+            result.addAll(getMeetingsByDate(date));
+        } else if (time != null) {
+            result.addAll(getMeetingsByTime(time));
+        } else return null;
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsByTime(java.util.Date time) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(time);
+        for (int i = 0; i < meetings.size(); i++) {
+            Calendar cal2 = Calendar.getInstance();
+            cal2.setTime(meetings.get(i).getDate());
+            boolean sameHour = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY);
+            if (sameHour) result.add(meetings.get(i));
         }
         return result;
     }
 
     @Override
-    public List<Meeting> getMeetingsByTime(LocalTime time) {
+    public List<Meeting> getMeetingsByDate(java.util.Date Date) {
         ArrayList<Meeting> result = new ArrayList<>();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(Date);
         for (int i = 0; i < meetings.size(); i++) {
-            if (meetings.get(i).getTime().isBefore(time.plusHours(1)) && meetings.get(i).getTime().isAfter(time) || meetings.get(i).getTime().equals(time)) {
-                result.add(meetings.get(i));
-            }
+            Calendar cal2 = Calendar.getInstance();
+            cal2.setTime(meetings.get(i).getDate());
+            boolean sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                    cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+            if (sameDay) result.add(meetings.get(i));
         }
         return result;
     }
