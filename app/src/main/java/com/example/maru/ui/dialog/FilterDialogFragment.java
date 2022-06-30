@@ -109,7 +109,7 @@ public class FilterDialogFragment extends DialogFragment {
 
             timePickerDialog = new
                     TimePickerDialog(getActivity(),
-//                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
                     timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
 
             if (hasFocus) {

@@ -20,7 +20,6 @@ import com.example.maru.model.Employee;
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,6 +27,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public  abstract class DummyMeetingGenerator {
@@ -35,21 +35,21 @@ public  abstract class DummyMeetingGenerator {
 
 
     public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
-            new Meeting(1, "Réunion A" ,new Date(2021-1900,11,11), AKALI ,new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(3));}}),
-            new Meeting(2, "Réunion B" ,new Date(1226557205000L), YASUO, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(4));add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(3, "Réunion C" ,new Date(1326557205000L), SION, new ArrayList<Employee>() {{
+            new Meeting("Réunion A" ,new java.util.Date(2022-1900,11,11,11,11,11), AKALI ,new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(3));}}),
+            new Meeting("Réunion B" ,new java.util.Date(2022-1900,10,6,13,0,0), YASUO, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(4));add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion C" ,new java.util.Date(2022-1900,6,29,6,0,0), SION, new ArrayList<Employee>() {{
                 for (int i = 0; i < DUMMY_EMPLOYEE.size(); i++) {
                     if (i % 2 == 0) {
                         add(DUMMY_EMPLOYEE.get(i));
                 }}
             }}),
-            new Meeting(4, "Réunion D" ,new Date(1526557205000L), ILLAOI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(5, "Réunion E" ,new Date(1426557205000L), AHRI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(6, "Réunion F" ,new Date(1626557205000L), PIKE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(7, "Réunion G" ,new Date(1726557205000L), DRAVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(8, "Réunion H" ,new Date(1826557205000L), DARIUS, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(9, "Réunion I" ,new Date(1926557205000L), GRAVE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting(10, "Réunion J" ,new Date(1026557205000L), RIVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}})
+            new Meeting("Réunion D" ,new java.util.Date(2022-1900,11,12,12,0,0), ILLAOI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion E" ,new java.util.Date(2022-1900,6,29,14,0,0), AHRI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion F" ,new java.util.Date(2022-1900,7,5,15,0,0), PIKE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion G" ,new java.util.Date(2022-1900,8,1,10,0,0), DRAVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion H" ,new java.util.Date(2022-1900,9,10,9,0,0), DARIUS, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion I" ,new java.util.Date(2022-1900,7,14,14,15,0), GRAVE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
+            new Meeting("Réunion J" ,new Date(2022-1900,1,15,16,0,0), RIVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}})
     );
 
     static List<Meeting> generateMeetings() {

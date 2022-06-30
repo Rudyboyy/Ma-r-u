@@ -1,5 +1,9 @@
 package com.example.maru.service;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
@@ -50,38 +54,29 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public List<Meeting> getMeetingsInChronologicalOrder() {// todo faire test sur mobile
+    public List<Meeting> getMeetingsInChronologicalOrder() {// todo marche pas
         Collections.sort(meetings, new Comparator<Meeting>() {
             @Override
             public int compare(Meeting meeting, Meeting t1) {
-                return 0;
+                if (meeting.getDate() == null || t1.getDate() == null) {
+                    return 0;
+                }
+                return meeting.getDate().compareTo(t1.getDate());
             }
         });
-        ArrayList<Meeting> result = new ArrayList<>();
-        /*int h = LocalTime.MIDNIGHT.plusHours(1).getHour();
-        while (h != LocalTime.MIDNIGHT.minusHours(1).getHour()) {
-            for (int i = 0; i < meetings.size(); i++) {
-                    if (h == meetings.get(i).getTime().getHour()) {
-                        result.add(meetings.get(i));
-                    }
-                    h++;
-                }
-        }*/
         return null;
     }
 
     @Override
     public List<Meeting> getMeetingByFilter(java.util.Date date, MeetingRoom room, Date time) {
         ArrayList<Meeting> result = new ArrayList<>();
-        if (date != null && room != null && time != null) {
-            result = new ArrayList<Meeting>() {{addAll(getMeetingsByDate(date));addAll(getMeetingByRoom(room));addAll(getMeetingsByTime(time));}};
-        } else if (room != null) {
+         if (room != null) {
             result.addAll(getMeetingByRoom(room));
-        } else if (date != null) {
+        } if (date != null) {
             result.addAll(getMeetingsByDate(date));
-        } else if (time != null) {
+        } if (time != null) {
             result.addAll(getMeetingsByTime(time));
-        } else return null;
+        }
         return result;
     }
 
@@ -93,7 +88,7 @@ public class DummyMeetingApiService implements MeetingApiService {
         for (int i = 0; i < meetings.size(); i++) {
             Calendar cal2 = Calendar.getInstance();
             cal2.setTime(meetings.get(i).getDate());
-            boolean sameHour = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY);
+            boolean sameHour = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY);// cal1.getTime().getHours() == cal2.getTime().getHours();
             if (sameHour) result.add(meetings.get(i));
         }
         return result;

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
     private ActivityMainBinding binding;
     private ArrayList<Meeting> mMeetingList = new ArrayList<>();
     private final MeetingApiService mMeetingApiService = DI.getMeetingApiService();
-    //    public static final String MEETING_INFO = "meetingInfo";//todo rajout
+    public static final String MEETING_INFO = "meetingInfo";//todo rajout
     private MeetingAdapter mMeetingAdapter;
 
     @Override
@@ -62,16 +62,21 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView.setLayoutManager(layoutManager);
-        mMeetingAdapter = new MeetingAdapter(mMeetingList, this);
+        mMeetingAdapter = new MeetingAdapter(mMeetingList, this, MainActivity.this);
         binding.recyclerView.setAdapter(mMeetingAdapter);
     }
+
+/*    @Override
+    protected void onResume() {//
+        super.onResume();
+    }*/
 
     private void initData() {
         mMeetingList = new ArrayList<>(mMeetingApiService.getMeetings());
     }
 
     private void setButton() {
-        binding.addButton.setOnClickListener(view1 -> startActivity(new Intent(this, AddMeetingActivity.class)));
+        binding.addButton.setOnClickListener(view -> startActivity(AddMeetingActivity.navigate(MainActivity.this)));//new Intent(MainActivity.this, AddMeetingActivity.class)));
     }
 
     @Override
@@ -106,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
     }
 
     private void chronoDialog() {
-        mMeetingList.clear();
-        mMeetingList.addAll(mMeetingApiService.getMeetingsInChronologicalOrder());
+//        mMeetingList.clear();
+        mMeetingApiService.getMeetingsInChronologicalOrder();
         if (binding.recyclerView.getAdapter() == null) return;
         binding.recyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -130,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements IOnMeetingDeleted
     public void onButtonClicked(MeetingRoom room, java.util.Date date, java.util.Date time) {
         if (room != null || date != null || time != null) {
             mMeetingList.clear();
-            mMeetingList.addAll(mMeetingApiService.getMeetingByFilter(date, room,time));
+            mMeetingList.addAll(mMeetingApiService.getMeetingByFilter(date, room, time));
             binding.recyclerView.getAdapter().notifyDataSetChanged();
         }
     }

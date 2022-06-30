@@ -1,21 +1,22 @@
 package com.example.maru.ui;
 
+import static com.example.maru.ui.MainActivity.MEETING_INFO;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maru.R;
-import com.example.maru.di.DI;
 import com.example.maru.model.Meeting;
-import com.example.maru.service.MeetingApiService;
 
 import java.util.ArrayList;
 
@@ -23,8 +24,10 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
     private ArrayList<Meeting> mMeetings;
     private final IOnMeetingDeleted deleteMeeting;
+    private final Context mContext;
 
-    public MeetingAdapter(ArrayList<Meeting> meetings, IOnMeetingDeleted deleteMeeting) {
+    public MeetingAdapter(ArrayList<Meeting> meetings, IOnMeetingDeleted deleteMeeting, Context context) {
+        this.mContext = context;
         this.mMeetings = meetings;
         this.deleteMeeting = deleteMeeting;
     }
@@ -47,18 +50,17 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meeting meeting = mMeetings.get(position);
         holder.displayMeeting(meeting);
+
         holder.deleteButton.setOnClickListener(view -> {
             deleteMeeting.onDeleteMeeting(meeting);
         });
 
-/*        holder.itemView.setOnClickListener(view -> {
-
+        holder.itemView.setOnClickListener(view -> {
             Intent detailMeetingActivityIntent = new Intent(mContext, DetailMeetingActivity.class);
-            detailMeetingActivityIntent.putExtra(MEETING_INFO, mMeetings);
+            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);// todo ne marche pas
             mContext.startActivity(detailMeetingActivityIntent);
-        });*/
+        });
     }
-
 
     @Override
     public int getItemCount() {

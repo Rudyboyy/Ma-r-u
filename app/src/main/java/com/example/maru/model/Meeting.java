@@ -13,23 +13,17 @@ import java.util.Random;
 
 public class Meeting implements Serializable {
 
-    private final long id;
     private MeetingRoom meetingRoom;
     private String meetingTopic;
     private ArrayList<Employee> attendees;
-    private Date mDate;
+    private java.util.Date mDate;
 
     protected static final SimpleDateFormat dateHeureFormat =
-            new SimpleDateFormat("hh:mm");//todo test metre dans utils
+            new SimpleDateFormat("HH:mm");//todo test metre dans utils
 
-
-    public static String formatterDateHeure(Date date) {
+    public static String formatterDateHour(java.util.Date date) {
         return dateHeureFormat.format(date);
     }//todo test metre dans utils
-
-    public long getId() {
-        return id;
-    }
 
     public String getMeetingTopic() {
         return meetingTopic;
@@ -56,10 +50,10 @@ public class Meeting implements Serializable {
     }
 
     public String getTime() {
-        return formatterDateHeure(mDate);
+        return formatterDateHour(mDate);
     }
 
-    public Date getDate() {
+    public java.util.Date getDate() {
         return mDate;
     }
 
@@ -68,9 +62,8 @@ public class Meeting implements Serializable {
     }
 
 
-    public Meeting(long id, String topic, Date time, MeetingRoom room, ArrayList<Employee> attendees) {
+    public Meeting(String topic, java.util.Date time, MeetingRoom room, ArrayList<Employee> attendees) {
 
-        this.id = id;
         this.meetingTopic = topic;
         this.meetingRoom = room;
         this.attendees = attendees;
