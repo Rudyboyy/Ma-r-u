@@ -1,5 +1,7 @@
 package com.example.maru.ui;
 
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.example.maru.ui.MainActivity.MEETING_INFO;
 
 import android.annotation.SuppressLint;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
 
-    private ArrayList<Meeting> mMeetings;
+    private ArrayList<Meeting> mMeetings; // todo arrayList ou List ? (entreVoisin etait en List)
     private final IOnMeetingDeleted deleteMeeting;
     private final Context mContext;
 
@@ -57,7 +59,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
         holder.itemView.setOnClickListener(view -> {
             Intent detailMeetingActivityIntent = new Intent(mContext, DetailMeetingActivity.class);
-            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);// todo ne marche pas
+//            detailMeetingActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);// todo ne marche pas (ca crash)
             mContext.startActivity(detailMeetingActivityIntent);
         });
     }
@@ -84,8 +87,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
         public void displayMeeting(Meeting meeting) {
 //            SimpleTimeZone simpleTimeZone = new SimpleTimeZone()
-            meetingInfo.setText(meeting.getMeetingTopic()+" - "+meeting.getTime()+" - "+meeting.getMeetingRoom());
-            attendees.setText(meeting.getAttendeesNames());
+            meetingInfo.setText(meeting.getMeetingTopic()+" - "+ meeting.getStringTime() +" - "+meeting.getMeetingRoom());
+//            attendees.setText(meeting.getAttendeesNames());// todo ***
+            attendees.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));// todo ***
         }
     }
 }

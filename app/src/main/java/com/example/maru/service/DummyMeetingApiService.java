@@ -1,17 +1,18 @@
 package com.example.maru.service;
 
-import android.os.Build;
+import android.content.Context;
+import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-
+import com.example.maru.model.Employee;
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
@@ -54,57 +55,132 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public List<Meeting> getMeetingsInChronologicalOrder() {// todo marche pas
-        Collections.sort(meetings, new Comparator<Meeting>() {
-            @Override
-            public int compare(Meeting meeting, Meeting t1) {
-                if (meeting.getDate() == null || t1.getDate() == null) {
-                    return 0;
-                }
-                return meeting.getDate().compareTo(t1.getDate());
+    public List<Employee> getAttendeesByMail(String name) {// todo ***
+        /*for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getAttendees().toString().equals(name)) {
+                return meetings.get(i).getAttendees();
             }
+        }*/
+        return null;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsInChronologicalOrder() {// todo marche pas
+        Collections.sort(meetings, (meeting, t1) -> {
+            if (meeting.getDateTime() == null || t1.getDateTime() == null) {
+                return 0;
+            }
+            return meeting.getDateTime().compareTo(t1.getDateTime());
         });
         return null;
     }
 
     @Override
-    public List<Meeting> getMeetingByFilter(java.util.Date date, MeetingRoom room, Date time) {
+    public List<Meeting> getMeetingByFilter(MeetingRoom room, LocalTime time, LocalDate date) {
         ArrayList<Meeting> result = new ArrayList<>();
-         if (room != null) {
+        if (room != null) {
             result.addAll(getMeetingByRoom(room));
-        } if (date != null) {
-            result.addAll(getMeetingsByDate(date));
-        } if (time != null) {
+        }
+        if (date != null && time != null) {
+            result.addAll(getMeetingByDateTime(LocalDateTime.of(date, time)));
+        }
+        if (time != null && date == null) {
             result.addAll(getMeetingsByTime(time));
         }
-        return result;
-    }
-
-    @Override
-    public List<Meeting> getMeetingsByTime(java.util.Date time) {
-        ArrayList<Meeting> result = new ArrayList<>();
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(time);
-        for (int i = 0; i < meetings.size(); i++) {
-            Calendar cal2 = Calendar.getInstance();
-            cal2.setTime(meetings.get(i).getDate());
-            boolean sameHour = cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY);// cal1.getTime().getHours() == cal2.getTime().getHours();
-            if (sameHour) result.add(meetings.get(i));
+        if (date != null && time == null) {
+            result.addAll(getMeetingsByDate(date));
+        }
+        if (date != null && time != null && room != null) {
+            return new ArrayList<>(getMeetingByDateTimeRoom(LocalDateTime.of(date, time), room));
+        }
+        if (room != null && date != null) {
+            return new ArrayList<>(getMeetingByDateRoom(date, room));
+        }
+        if (room != null && time != null) {
+            return new ArrayList<>(getMeetingByTimeRoom(time, room));
         }
         return result;
     }
 
     @Override
-    public List<Meeting> getMeetingsByDate(java.util.Date Date) {
+    public List<Meeting> getMeetingByDateTime(LocalDateTime dateTime) {
         ArrayList<Meeting> result = new ArrayList<>();
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(Date);
         for (int i = 0; i < meetings.size(); i++) {
-            Calendar cal2 = Calendar.getInstance();
-            cal2.setTime(meetings.get(i).getDate());
-            boolean sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
-                    cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
-            if (sameDay) result.add(meetings.get(i));
+            if (meetings.get(i).getTime().getHour() == dateTime.toLocalTime().getHour() && meetings.get(i).getTime().getMinute() == dateTime.toLocalTime().getMinute()
+                    && meetings.get(i).getDate().getDayOfMonth() == dateTime.toLocalDate().getDayOfMonth() && meetings.get(i).getDate().getYear() == dateTime.toLocalDate().getYear()) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingByDateTimeRoom(LocalDateTime dateTime, MeetingRoom room) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getTime().getHour() == dateTime.toLocalTime().getHour() && meetings.get(i).getTime().getMinute() == dateTime.toLocalTime().getMinute()
+                    && meetings.get(i).getDate().getDayOfMonth() == dateTime.toLocalDate().getDayOfMonth() && meetings.get(i).getDate().getYear() == dateTime.toLocalDate().getYear()
+                    && meetings.get(i).getMeetingRoom() == room) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingByDateRoom(LocalDate date, MeetingRoom room) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getDate().getDayOfMonth() == date.getDayOfMonth() && meetings.get(i).getDate().getYear() == date.getYear()
+                    && meetings.get(i).getMeetingRoom() == room) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingByTimeRoom(LocalTime time, MeetingRoom room) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getTime().getHour() == time.getHour() && meetings.get(i).getTime().getMinute() == time.getMinute()
+                    && meetings.get(i).getMeetingRoom() == room) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean checkMeetingRoomIsAvailable(Meeting meeting) {
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meeting.getMeetingRoom() == meetings.get(i).getMeetingRoom() && meeting.getDate().getDayOfMonth() == meetings.get(i).getDate().getDayOfMonth()
+                    && meeting.getDate().getYear() == meetings.get(i).getDate().getYear() && meeting.getTime().isAfter(meetings.get(i).getTime().minusHours(1))
+                    && meeting.getTime().isBefore(meetings.get(i).getTime().plusHours(1))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsByTime(LocalTime time) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getTime().getHour() == time.getHour() && meetings.get(i).getTime().getMinute() == time.getMinute()) {
+                result.add(meetings.get(i));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Meeting> getMeetingsByDate(LocalDate date) {
+        ArrayList<Meeting> result = new ArrayList<>();
+        for (int i = 0; i < meetings.size(); i++) {
+            if (meetings.get(i).getDate().getDayOfMonth() == date.getDayOfMonth() && meetings.get(i).getDate().getYear() == date.getYear()) {
+                result.add(meetings.get(i));
+            }
         }
         return result;
     }

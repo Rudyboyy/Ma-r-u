@@ -12,7 +12,7 @@
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="date"
+        android:hint="@string/date"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/timePicker"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,13 +22,24 @@
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="time"
+        android:hint="@string/time"
         app:layout_constraintTop_toBottomOf="@id/datePicker"
         app:layout_constraintBottom_toTopOf="@+id/room_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <EditText
+        android:id="@+id/roomPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/room"
+        android:textColor="@color/cardview_shadow_end_color"
+        app:layout_constraintTop_toBottomOf="@id/room_list"
+        app:layout_constraintBottom_toTopOf="@+id/room_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+<!--           todo rajouter un hint au spinner-->
     <Spinner
         android:id="@+id/room_list"
         android:layout_width="match_parent"
@@ -36,10 +47,10 @@
         app:layout_constraintTop_toBottomOf="@id/timePicker"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.AppCompat.Spinner.Underlined" >
+        app:layout_constraintEnd_toEndOf="parent" >
 
         <requestFocus /> <!--todo voir se que ca change-->
     </Spinner>
+<!--    style="@style/Widget.AppCompat.Spinner.Underlined"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

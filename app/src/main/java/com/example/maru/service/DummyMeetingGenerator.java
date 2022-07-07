@@ -12,6 +12,8 @@ import static com.example.maru.model.MeetingRoom.RIVEN;
 import static com.example.maru.model.MeetingRoom.SION;
 import static com.example.maru.model.MeetingRoom.YASUO;
 
+import static java.lang.Enum.valueOf;
+
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -21,6 +23,7 @@ import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
@@ -35,21 +38,26 @@ public  abstract class DummyMeetingGenerator {
 
 
     public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
-            new Meeting("Réunion A" ,new java.util.Date(2022-1900,11,11,11,11,11), AKALI ,new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(3));}}),
-            new Meeting("Réunion B" ,new java.util.Date(2022-1900,10,6,13,0,0), YASUO, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(4));add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion C" ,new java.util.Date(2022-1900,6,29,6,0,0), SION, new ArrayList<Employee>() {{
-                for (int i = 0; i < DUMMY_EMPLOYEE.size(); i++) {
-                    if (i % 2 == 0) {
-                        add(DUMMY_EMPLOYEE.get(i));
-                }}
-            }}),
-            new Meeting("Réunion D" ,new java.util.Date(2022-1900,11,12,12,0,0), ILLAOI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion E" ,new java.util.Date(2022-1900,6,29,14,0,0), AHRI, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion F" ,new java.util.Date(2022-1900,7,5,15,0,0), PIKE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion G" ,new java.util.Date(2022-1900,8,1,10,0,0), DRAVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion H" ,new java.util.Date(2022-1900,9,10,9,0,0), DARIUS, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion I" ,new java.util.Date(2022-1900,7,14,14,15,0), GRAVE, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}}),
-            new Meeting("Réunion J" ,new Date(2022-1900,1,15,16,0,0), RIVEN, new ArrayList<Employee>() {{add(DUMMY_EMPLOYEE.get(0));}})
+            new Meeting("Réunion A" , LocalTime.of(10,  0), LocalDate.now().plusDays(1), AKALI , Arrays.asList(DUMMY_EMPLOYEE.get(0).getMail(), DUMMY_EMPLOYEE.get(1).getMail())),
+            new Meeting("Réunion B" , LocalTime.of(11,  0), LocalDate.now(), AKALI , Arrays.asList(DUMMY_EMPLOYEE.get(1).getMail(), DUMMY_EMPLOYEE.get(2).getMail())),
+            new Meeting("Réunion C" , LocalTime.of(12,  0), LocalDate.now(), YASUO , Arrays.asList(DUMMY_EMPLOYEE.get(3).getMail(), DUMMY_EMPLOYEE.get(5).getMail())),
+            new Meeting("Réunion D" , LocalTime.of(13,  0), LocalDate.now(), SION  , Arrays.asList(DUMMY_EMPLOYEE.get(6).getMail(), DUMMY_EMPLOYEE.get(9).getMail())),
+            new Meeting("Réunion E" , LocalTime.of(14,  0), LocalDate.now(), AKALI , Arrays.asList(DUMMY_EMPLOYEE.get(8).getMail(), DUMMY_EMPLOYEE.get(0).getMail())),
+            new Meeting("Réunion F" , LocalTime.of(15,  0), LocalDate.now(), AKALI , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion G" , LocalTime.of(16,  0), LocalDate.now(), AKALI , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion H" , LocalTime.of(17,  0), LocalDate.now(), ILLAOI, Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion I" , LocalTime.of(18,  0), LocalDate.now(), YASUO , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion J" , LocalTime.of(19,  0), LocalDate.now(), AHRI  , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion K" , LocalTime.of(20,  0), LocalDate.now(), AKALI , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion L" , LocalTime.of(20, 30), LocalDate.now(), GRAVE , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion M" , LocalTime.of(19, 30), LocalDate.now(), SION  , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion N" , LocalTime.of( 9, 30), LocalDate.now(), ILLAOI, Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion O" , LocalTime.of( 8, 30), LocalDate.now(), AHRI  , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion P" , LocalTime.of( 7, 30), LocalDate.now(), PIKE  , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion Q" , LocalTime.of( 6, 30), LocalDate.now(), DRAVEN, Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion R" , LocalTime.of(11, 30), LocalDate.now(), DARIUS, Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion S" , LocalTime.of(14, 30), LocalDate.now(), GRAVE , Arrays.asList("zeze", "defezf")),
+            new Meeting("Réunion T" , LocalTime.of(15, 30), LocalDate.now(), RIVEN , Arrays.asList("zeze", "defezf"))
     );
 
     static List<Meeting> generateMeetings() {

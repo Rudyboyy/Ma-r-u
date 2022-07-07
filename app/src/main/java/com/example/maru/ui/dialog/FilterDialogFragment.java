@@ -29,9 +29,12 @@ import com.example.maru.model.MeetingRoom;
 import com.example.maru.service.MeetingApiService;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,22 +48,12 @@ public class FilterDialogFragment extends DialogFragment {
     private OnPositiveButtonClickListener mCallBack;
     private MeetingRoom mRoom;
     private String roomName;
-    private Date mDate;
-    private Date mTime;
+    private LocalDate mDate;
+    private LocalTime mTime;
     private int lastSelectedHour = -1;
     private int lastSelectedMinute = -1;
     private String dateString;
     private String timeString;
-
-    public Date format() {//todo comprend pas
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss", Locale.getDefault());
-            mDate = formatter.parse(dateString + timeString); // DateString + TimeString
-            return mDate;
-        } catch (Exception exception) {
-            return null;
-        }
-    }
 
     @NonNull
     @Override
@@ -69,13 +62,17 @@ public class FilterDialogFragment extends DialogFragment {
         binding = FragmentFilterDialogBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         builder.setView(view);
+        binding.roomPicker.setKeyListener(null);// pour que le clavier ne s'affiche pas et qu'il ne soit pas editable
+        binding.timePicker.setKeyListener(null);
+        binding.datePicker.setKeyListener(null);
         initSpinner();
         initDate();
         initTime();
 
         builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
             mRoom = mMeetingApiService.getMeetingRoomByName(roomName);
-            mCallBack.onButtonClicked(mRoom, mDate, mTime);
+
+            mCallBack.onButtonClicked(mRoom, mTime, mDate);
         });
 
         builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
@@ -94,21 +91,32 @@ public class FilterDialogFragment extends DialogFragment {
             TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
 
                 @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) { // todo prend que si on met l'heure exact
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     lastSelectedHour = hourOfDay;
                     lastSelectedMinute = minute;
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(hourOfDay, minute);
-                    timeString = hourOfDay + ":" + minute;
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.set(hourOfDay, minute);
+
+                    String finalHour = "" + hourOfDay;
+                    if (hourOfDay < 10) {
+                        finalHour = "0" + finalHour;
+                    }
+
+                    String finalMinute = "" + minute;
+                    if (minute < 10) {
+                        finalMinute = "0" + finalMinute;
+                    }
+
+                    timeString = finalHour + ":" + finalMinute;
                     binding.timePicker.setText(timeString);
-                    mTime = cal.getTime();
+                    mTime = LocalTime.of(hourOfDay, minute);
                 }
             };
 
             TimePickerDialog timePickerDialog;
 
             timePickerDialog = new
-                    TimePickerDialog(getActivity(),
+                    TimePickerDialog(requireActivity(),
                     android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
                     timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
 
@@ -131,9 +139,20 @@ public class FilterDialogFragment extends DialogFragment {
                 month++;
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
-                dateString = day + "/" + month + "/" + year;
+
+                String finalMonth = "" + month;
+                if (month < 10) {
+                    finalMonth = "0" + finalMonth;
+                }
+
+                String finalDay = "" + day;
+                if (day < 10) {
+                    finalDay = "0" + finalDay;
+                }
+
+                dateString = finalDay + "/" + finalMonth + "/" + year;
                 binding.datePicker.setText(dateString);
-                mDate = cal.getTime();
+                mDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             }, mYear, mMonth, mDay);
             if (hasFocus) {
                 datePickerDialog.show();
@@ -157,6 +176,7 @@ public class FilterDialogFragment extends DialogFragment {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         roomName = adapterView.getItemAtPosition(i).toString();
+                        binding.roomPicker.setText(roomName);
                     }
 
                     @Override
@@ -167,7 +187,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     public interface OnPositiveButtonClickListener {
-        void onButtonClicked(MeetingRoom room, Date date, Date time);
+        void onButtonClicked(MeetingRoom room, LocalTime time, LocalDate date);
     }
 
     private void createCallBack() {
