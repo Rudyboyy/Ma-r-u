@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @SuppressLint("NewApi")
     private void chronoDialog() {
-        mMeetingList.clear();
-        mMeetingApiService.getMeetingsInChronologicalOrder();
+        mMeetingList.sort(Meeting::compareTo);
         if (binding.recyclerView.getAdapter() == null) return;
         binding.recyclerView.getAdapter().notifyDataSetChanged();
     }

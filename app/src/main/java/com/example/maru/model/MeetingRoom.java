@@ -6,16 +6,16 @@ import com.example.maru.R;
 
 public enum MeetingRoom {
 
-    AKALI("akali", R.drawable.ahri),
-    YASUO("yasuo", R.drawable.ahri),
-    SION("sion", R.drawable.ahri),
-    ILLAOI("illaoi", R.drawable.ahri),
+    AKALI("akali", R.drawable.akali),
+    YASUO("yasuo", R.drawable.yasuo),
+    SION("sion", R.drawable.sion),
+    ILLAOI("illaoi", R.drawable.illaoi),
     AHRI("ahri", R.drawable.ahri),
-    PIKE("pike", R.drawable.ahri),
-    DRAVEN("draven", R.drawable.ahri),
-    DARIUS("darius", R.drawable.ahri),
-    GRAVE("grave", R.drawable.ahri),
-    RIVEN("riven", R.drawable.ahri);
+    PYKE("pyke", R.drawable.pyke),
+    DRAVEN("draven", R.drawable.draven),
+    DARIUS("darius", R.drawable.darius),
+    GRAVE("grave", R.drawable.grave),
+    RIVEN("riven", R.drawable.riven);
 
     private final String name;
 

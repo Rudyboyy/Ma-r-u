@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Meeting implements Serializable {
+public class Meeting implements
+        Serializable,
+        Comparable<Meeting> {
 
     private MeetingRoom meetingRoom;
     private String meetingTopic;
@@ -99,7 +101,7 @@ public class Meeting implements Serializable {
 
     public String getRoomsNames() {//todo rajout
         String result = "";
-        for(MeetingRoom rooms : MeetingRoom.values()) {
+        for (MeetingRoom rooms : MeetingRoom.values()) {
             result += rooms.getName();
         }
         return result;
@@ -124,5 +126,12 @@ public class Meeting implements Serializable {
                 ", mDate=" + mDate +
                 ", dateHourFormat=" + dateHourFormat +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Meeting meeting) {
+        if (getDateTime() == null || meeting.getDateTime() == null)
+            return 0;
+        return getDateTime().compareTo(meeting.getDateTime());
     }
 }

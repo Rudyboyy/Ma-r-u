@@ -1,7 +1,10 @@
 package com.example.maru.service;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.maru.model.Employee;
 import com.example.maru.model.Meeting;
@@ -61,17 +64,6 @@ public class DummyMeetingApiService implements MeetingApiService {
                 return meetings.get(i).getAttendees();
             }
         }*/
-        return null;
-    }
-
-    @Override
-    public List<Meeting> getMeetingsInChronologicalOrder() {// todo marche pas
-        Collections.sort(meetings, (meeting, t1) -> {
-            if (meeting.getDateTime() == null || t1.getDateTime() == null) {
-                return 0;
-            }
-            return meeting.getDateTime().compareTo(t1.getDateTime());
-        });
         return null;
     }
 

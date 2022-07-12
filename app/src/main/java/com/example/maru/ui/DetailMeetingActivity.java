@@ -76,6 +76,7 @@ public class DetailMeetingActivity extends AppCompatActivity {
 
     private void setMeeting() {
         meeting = (Meeting) getIntent().getSerializableExtra(MEETING_INFO);
+        binding.itemListAvatar.setImageResource(meeting.getMeetingRoom().getIconRes());
         binding.topic.setText(meeting.getMeetingTopic());//setText("logo salle réu + sujet réu")
         binding.stateMeeting.setText(setMeetingState(meeting));
         binding.attendeesMail.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));

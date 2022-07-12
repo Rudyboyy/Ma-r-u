@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maru.R;
 import com.example.maru.model.Meeting;
+import com.example.maru.model.MeetingRoom;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         }
 
         public void displayMeeting(Meeting meeting) {
-//            SimpleTimeZone simpleTimeZone = new SimpleTimeZone()
+            avatar.setImageResource(meeting.getMeetingRoom().getIconRes());
             meetingInfo.setText(meeting.getMeetingTopic()+" - "+ meeting.getStringTime() +" - "+meeting.getMeetingRoom());
 //            attendees.setText(meeting.getAttendeesNames());// todo ***
             attendees.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));// todo ***
