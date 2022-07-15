@@ -118,7 +118,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 mMeetingApiService.createMeeting(meeting);
                 finish();
             } else
-                Toast.makeText(this, getString(R.string.create_meeting_room_not_available), Toast.LENGTH_SHORT).show();//todo string.xml
+                Toast.makeText(this, getString(R.string.create_meeting_room_not_available), Toast.LENGTH_SHORT).show();
         });
     }
 
