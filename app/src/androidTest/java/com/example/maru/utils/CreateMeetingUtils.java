@@ -11,17 +11,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import androidx.annotation.Nullable;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.maru.R;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class CreateMeetingUtils {
 
 
-    public static void createMeeting(@Nullable String topic, int day, int month, int years, int hour, int minute, String room, @Nullable String attendees) {
+    public static void createMeeting(String topic, int day, int month, int years, int hour, int minute, String room, String attendees) {
 
         onView(ViewMatchers.withId(R.id.addButton)).perform(ViewActions.click());
         if (topic != null) {

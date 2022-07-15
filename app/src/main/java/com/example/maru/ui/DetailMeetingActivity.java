@@ -61,23 +61,27 @@ public class DetailMeetingActivity extends AppCompatActivity {
         }
 
         if (meeting.getTime().isBefore(LocalTime.now()) && meeting.getTime().isAfter(LocalTime.now().minusHours(1)) && meeting.getDate().equals(LocalDate.now())) {
-            return "Réunion en cours...";//todo mettre dans String.xml
+            return getString(R.string.meeting_details_time_now);
+
         } else if (meeting.getTime().isAfter(LocalTime.now()) && meeting.getDate().equals(LocalDate.now())) {
-            return "Réunion prévue aujourd'hui à " + meeting.getTime();
+            return getString(R.string.meeting_details_time_today, meeting.getTime().toString());
+
         } else if (meeting.getTime().isBefore(LocalTime.now()) && meeting.getDate().equals(LocalDate.now()) || meeting.getDate().isBefore(LocalDate.now())) {
-            return "Réunion terminée";
+            return getString(R.string.meeting_details_time_done);
+
         } else if (meeting.getDate().isAfter(LocalDate.now().plusDays(1))) {
-            return "Réunion prévue le " + finalDay + "/" + finalMonth + "/" + meeting.getDate().getYear() + " à " + meeting.getTime();
+            return getString(R.string.meeting_details_expected_date, finalDay, finalMonth, meeting.getDate().getYear(), meeting.getTime().toString());
+
         } else if (meeting.getDate().equals(LocalDate.now().plusDays(1))) {
-            return "Réunion prévue demain à " + meeting.getTime();
-        } //todo remplacer par un switch 
+            return getString(R.string.meeting_details_expected_tomorrow, meeting.getTime().toString());
+        }
         return null;
     }
 
     private void setMeeting() {
         meeting = (Meeting) getIntent().getSerializableExtra(MEETING_INFO);
         binding.itemListAvatar.setImageResource(meeting.getMeetingRoom().getIconRes());
-        binding.topic.setText(meeting.getMeetingTopic());//setText("logo salle réu + sujet réu")
+        binding.topic.setText(meeting.getMeetingTopic());
         binding.stateMeeting.setText(setMeetingState(meeting));
         binding.attendeesMail.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));
     }

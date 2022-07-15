@@ -1,21 +1,15 @@
 package com.example.maru.ui;
 
-import static com.example.maru.model.MeetingRoom.RIVEN;
-
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -24,16 +18,13 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.maru.R;
 import com.example.maru.databinding.ActivityAddMeetingBinding;
 import com.example.maru.di.DI;
-import com.example.maru.model.Employee;
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 import com.example.maru.service.MeetingApiService;
-import com.example.maru.ui.dialog.MultiSpinner;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -47,12 +38,10 @@ public class AddMeetingActivity extends AppCompatActivity {
     private int lastSelectedHour = -1;
     private int lastSelectedMinute = -1;
     private LocalTime mTime;
-    private LocalDate mDate;// = LocalDate.now();
+    private LocalDate mDate;
     private String roomName;
     private String mTopic;
     private List<String> mAttendees;
-
-//    private List<String> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +52,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         initTime();
         initDate();
         initRoomsSpinner();
-//        initAttendeesSpinner();
         setSaveButton();
-/*        MultiSpinner multiSpinner = (MultiSpinner) findViewById(R.id.multi_spinner);
-        multiSpinner.setItems(items, getString(R.array.attendees), );*/
+
 
     }
 
@@ -89,31 +76,31 @@ public class AddMeetingActivity extends AppCompatActivity {
         binding.saveButton.setOnClickListener(view -> {
 
             mRoom = mMeetingApiService.getMeetingRoomByName(roomName);
-            mTopic = binding.textFieldTopic.getEditText().getText().toString();
-            mAttendees = Arrays.asList(binding.textFieldAttendees.getEditText().getText().toString().split(" "));
+            mTopic = Objects.requireNonNull(binding.textFieldTopic.getEditText()).getText().toString();
+            mAttendees = Arrays.asList(Objects.requireNonNull(binding.textFieldAttendees.getEditText()).getText().toString().split(" "));
 
             if (mTopic.isEmpty()) {
-                binding.textFieldTopic.setError("Veuiller choisir le sujet de la réunion");
+                binding.textFieldTopic.setError(getString(R.string.create_meeting_topic_error));
                 return;
             } else binding.textFieldTopic.setError(null);
 
             if (mDate == null) {
-                binding.textFieldDate.setError("Veuiller choisir la date de la réunion");
+                binding.textFieldDate.setError(getString(R.string.create_meeting_room_error));
                 return;
             } else binding.textFieldDate.setError(null);
 
             if (mTime == null) {
-                binding.textFieldTime.setError("Veuiller choisir l'heure de la réunion");
+                binding.textFieldTime.setError(getString(R.string.create_meeting_date_error));
                 return;
             } else binding.textFieldTime.setError(null);
 
             if (mRoom == null) {
-                binding.textFieldRoom.setError("Veuiller choisir une salle de réunion");
+                binding.textFieldRoom.setError(getString(R.string.create_meeting_time_error));
                 return;
             } else binding.textFieldRoom.setError(null);
 
             if (mAttendees.size() < 2) {
-                binding.textFieldAttendees.setError("Veuiller ajouter 2 participant mininum");
+                binding.textFieldAttendees.setError(getString(R.string.create_meeting_participant_error));
                 return;
             } else binding.textFieldAttendees.setError(null);
 
@@ -127,10 +114,11 @@ public class AddMeetingActivity extends AppCompatActivity {
             );
 
             if (mMeetingApiService.checkMeetingRoomIsAvailable(meeting)) {
-                Toast.makeText(this, "Réunion créé !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meeting_with_success), Toast.LENGTH_SHORT).show();
                 mMeetingApiService.createMeeting(meeting);
                 finish();
-            } else Toast.makeText(this, "La salle de réunion choisi n'est pas disponible !", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(this, getString(R.string.create_meeting_room_not_available), Toast.LENGTH_SHORT).show();//todo string.xml
         });
     }
 
@@ -175,29 +163,23 @@ public class AddMeetingActivity extends AppCompatActivity {
                 this.lastSelectedMinute = c.get(Calendar.MINUTE);
             }
 
-            TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog.OnTimeSetListener timeSetListener = (view1, hourOfDay, minute) -> {
+                lastSelectedHour = hourOfDay;
+                lastSelectedMinute = minute;
 
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    lastSelectedHour = hourOfDay;
-                    lastSelectedMinute = minute;
-//                    Calendar cal = Calendar.getInstance();
-//                    cal.set(hourOfDay, minute);
-
-                    String finalHour = "" + hourOfDay;
-                    if (hourOfDay < 10) {
-                        finalHour = "0" + finalHour;
-                    }
-
-                    String finalMinute = "" + minute;
-                    if (minute < 10) {
-                        finalMinute = "0" + finalMinute;
-                    }
-
-                    String timeString = finalHour + ":" + finalMinute;
-                    binding.textTime.setText(timeString);
-                    mTime = LocalTime.of(hourOfDay, minute);
+                String finalHour = "" + hourOfDay;
+                if (hourOfDay < 10) {
+                    finalHour = "0" + finalHour;
                 }
+
+                String finalMinute = "" + minute;
+                if (minute < 10) {
+                    finalMinute = "0" + finalMinute;
+                }
+
+                String timeString = finalHour + ":" + finalMinute;
+                binding.textTime.setText(timeString);
+                mTime = LocalTime.of(hourOfDay, minute);
             };
 
             TimePickerDialog timePickerDialog;
@@ -205,7 +187,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             timePickerDialog = new
                     TimePickerDialog(this,
                     android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                    timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
+                    timeSetListener, lastSelectedHour, lastSelectedMinute, true);
 
             if (hasFocus) {
                 timePickerDialog.show();
@@ -239,62 +221,17 @@ public class AddMeetingActivity extends AppCompatActivity {
         );
     }
 
-/*    private void initAttendeesSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.attendees,
-                android.R.layout.simple_spinner_dropdown_item
-        );
-
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_multiple_choice);
-
-        binding.spinnerAttendee.setAdapter(adapter);
-
-        binding.spinnerAttendee.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        String attendeesMail = adapterView.getItemAtPosition(i).toString();
-                        binding.textAttendees.setText(attendeesMail);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                }
-        );
-    }*/
-
     private void initUi() {
         binding = ActivityAddMeetingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        binding.textDate.setKeyListener(null);// pour que le clavier ne s'affiche pas et qu'il ne soit pas editable
+        binding.textDate.setKeyListener(null);
         binding.textTime.setKeyListener(null);
         binding.textRoom.setKeyListener(null);
     }
 
-    /*    @NonNull
-        public static Intent navigate(Context context) {//todo test
-            return new Intent(context, AddMeetingActivity.class);
-        }*/
     public static void navigate(FragmentActivity activity) {
         Intent intent = new Intent(activity, AddMeetingActivity.class);
         ActivityCompat.startActivity(activity, intent, null);
     }
-
-/*    @Override
-    public void onItemsSelected(boolean[] selected) {
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String attendeesMail = adapterView.getItemAtPosition(i).toString();
-                binding.textAttendees.setText(attendeesMail);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        };
-    }*/
 }

@@ -1,7 +1,6 @@
 package com.example.maru.ui;
 
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.example.maru.ui.MainActivity.MEETING_INFO;
 
 import android.annotation.SuppressLint;
@@ -19,13 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maru.R;
 import com.example.maru.model.Meeting;
-import com.example.maru.model.MeetingRoom;
 
 import java.util.ArrayList;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
 
-    private ArrayList<Meeting> mMeetings; // todo arrayList ou List ? (entreVoisin etait en List)
+    private ArrayList<Meeting> mMeetings;
     private final IOnMeetingDeleted deleteMeeting;
     private final Context mContext;
 
@@ -54,14 +52,11 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         Meeting meeting = mMeetings.get(position);
         holder.displayMeeting(meeting);
 
-        holder.deleteButton.setOnClickListener(view -> {
-            deleteMeeting.onDeleteMeeting(meeting);
-        });
+        holder.deleteButton.setOnClickListener(view -> deleteMeeting.onDeleteMeeting(meeting));
 
         holder.itemView.setOnClickListener(view -> {
             Intent detailMeetingActivityIntent = new Intent(mContext, DetailMeetingActivity.class);
-//            detailMeetingActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);// todo ne marche pas (ca crash)
+            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);
             mContext.startActivity(detailMeetingActivityIntent);
         });
     }
@@ -77,6 +72,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         public final TextView meetingInfo;
         public final TextView attendees;
         public final ImageButton deleteButton;
+        public final TextView date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,13 +80,23 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             this.meetingInfo = itemView.findViewById(R.id.item_list_meeting_info);
             this.attendees = itemView.findViewById(R.id.item_list_attendees);
             this.deleteButton = itemView.findViewById(R.id.item_list_delete_button);
+            this.date = itemView.findViewById(R.id.item_list_date);
         }
 
+        @SuppressLint("SetTextI18n")
         public void displayMeeting(Meeting meeting) {
+            String finalMonth = "" + meeting.getDate().getMonthValue();
+            String finalDay = "" + meeting.getDate().getDayOfMonth();
+            if (meeting.getDate().getMonthValue() < 10) {
+                finalMonth = "0" + finalMonth;
+            }
+            if (meeting.getDate().getDayOfMonth() < 10) {
+                finalDay = "0" + finalDay;
+            }
             avatar.setImageResource(meeting.getMeetingRoom().getIconRes());
-            meetingInfo.setText(meeting.getMeetingTopic()+" - "+ meeting.getStringTime() +" - "+meeting.getMeetingRoom());
-//            attendees.setText(meeting.getAttendeesNames());// todo ***
-            attendees.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));// todo ***
+            date.setText(finalDay + "/" + finalMonth + "/" + meeting.getDate().getYear());
+            meetingInfo.setText(meeting.getMeetingTopic() + " - " + meeting.getStringTime() + " - " + meeting.getMeetingRoom());
+            attendees.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));
         }
     }
 }

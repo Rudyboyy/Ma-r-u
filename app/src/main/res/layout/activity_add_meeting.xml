@@ -2,10 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addMeeting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AddMeetingActivity"
-    android:id="@+id/addMeeting" >
+    tools:context=".ui.AddMeetingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:title="Create meeting"
+            app:title="@string/create_meeting"
             app:titleTextColor="@color/white" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -29,9 +29,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,9 +50,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textFieldTopic"
@@ -66,24 +66,15 @@
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
-        <!--
-            <com.example.maru.ui.dialog.MultiSpinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/multi_spinner"
-                app:layout_constraintStart_toStartOf="@id/textFieldAttendees"
-                app:layout_constraintEnd_toEndOf="@id/textFieldAttendees"
-                app:layout_constraintTop_toTopOf="@id/textFieldAttendees"
-                app:layout_constraintBottom_toBottomOf="@id/textFieldAttendees"/>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textFieldTime"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textFieldDate"
@@ -103,9 +94,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textFieldTime"
@@ -125,9 +116,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textFieldRoom"
@@ -146,31 +137,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toBottomOf="@id/textFieldRoom"
             app:layout_constraintEnd_toEndOf="@id/textFieldRoom"
             app:layout_constraintStart_toStartOf="@id/textFieldRoom"
             app:layout_constraintTop_toTopOf="@id/textFieldRoom" />
 
-        <!--    <Spinner
-                android:id="@+id/spinnerAttendee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                app:layout_constraintStart_toStartOf="@id/textFieldAttendees"
-                app:layout_constraintEnd_toEndOf="@id/textFieldAttendees"
-                app:layout_constraintTop_toTopOf="@id/textFieldAttendees"
-                app:layout_constraintBottom_toBottomOf="@id/textFieldAttendees" />-->
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
             android:background="@color/blue"
             android:text="@string/save"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textFieldAttendees" />

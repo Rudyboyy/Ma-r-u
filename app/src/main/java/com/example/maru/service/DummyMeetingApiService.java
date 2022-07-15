@@ -1,12 +1,5 @@
 package com.example.maru.service;
 
-import android.content.Context;
-import android.os.Build;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
-
-import com.example.maru.model.Employee;
 import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 
@@ -14,8 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
@@ -58,16 +49,6 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public List<Employee> getAttendeesByMail(String name) {// todo ***
-        /*for (int i = 0; i < meetings.size(); i++) {
-            if (meetings.get(i).getAttendees().toString().equals(name)) {
-                return meetings.get(i).getAttendees();
-            }
-        }*/
-        return null;
-    }
-
-    @Override
     public List<Meeting> getMeetingByFilter(MeetingRoom room, LocalTime time, LocalDate date) {
         ArrayList<Meeting> result = new ArrayList<>();
         if (room != null) {
@@ -83,13 +64,16 @@ public class DummyMeetingApiService implements MeetingApiService {
             result.addAll(getMeetingsByDate(date));
         }
         if (date != null && time != null && room != null) {
-            return new ArrayList<>(getMeetingByDateTimeRoom(LocalDateTime.of(date, time), room));
+            result.clear();
+            result.addAll(getMeetingByDateTimeRoom(LocalDateTime.of(date, time), room));
         }
         if (room != null && date != null) {
-            return new ArrayList<>(getMeetingByDateRoom(date, room));
+            result.clear();
+            result.addAll(getMeetingByDateRoom(date, room));
         }
         if (room != null && time != null) {
-            return new ArrayList<>(getMeetingByTimeRoom(time, room));
+            result.clear();
+            result.addAll(getMeetingByTimeRoom(time, room));
         }
         return result;
     }

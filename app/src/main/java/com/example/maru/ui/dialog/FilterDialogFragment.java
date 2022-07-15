@@ -4,42 +4,26 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.maru.R;
 import com.example.maru.databinding.FragmentFilterDialogBinding;
 import com.example.maru.di.DI;
-import com.example.maru.model.Meeting;
 import com.example.maru.model.MeetingRoom;
 import com.example.maru.service.MeetingApiService;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 public class FilterDialogFragment extends DialogFragment {
 
@@ -62,7 +46,7 @@ public class FilterDialogFragment extends DialogFragment {
         binding = FragmentFilterDialogBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         builder.setView(view);
-        binding.roomPicker.setKeyListener(null);// pour que le clavier ne s'affiche pas et qu'il ne soit pas editable
+        binding.roomPicker.setKeyListener(null);
         binding.timePicker.setKeyListener(null);
         binding.datePicker.setKeyListener(null);
         initSpinner();
@@ -88,29 +72,23 @@ public class FilterDialogFragment extends DialogFragment {
                 this.lastSelectedMinute = c.get(Calendar.MINUTE);
             }
 
-            TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog.OnTimeSetListener timeSetListener = (view1, hourOfDay, minute) -> {
+                lastSelectedHour = hourOfDay;
+                lastSelectedMinute = minute;
 
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    lastSelectedHour = hourOfDay;
-                    lastSelectedMinute = minute;
-//                    Calendar cal = Calendar.getInstance();
-//                    cal.set(hourOfDay, minute);
-
-                    String finalHour = "" + hourOfDay;
-                    if (hourOfDay < 10) {
-                        finalHour = "0" + finalHour;
-                    }
-
-                    String finalMinute = "" + minute;
-                    if (minute < 10) {
-                        finalMinute = "0" + finalMinute;
-                    }
-
-                    timeString = finalHour + ":" + finalMinute;
-                    binding.timePicker.setText(timeString);
-                    mTime = LocalTime.of(hourOfDay, minute);
+                String finalHour = "" + hourOfDay;
+                if (hourOfDay < 10) {
+                    finalHour = "0" + finalHour;
                 }
+
+                String finalMinute = "" + minute;
+                if (minute < 10) {
+                    finalMinute = "0" + finalMinute;
+                }
+
+                timeString = finalHour + ":" + finalMinute;
+                binding.timePicker.setText(timeString);
+                mTime = LocalTime.of(hourOfDay, minute);
             };
 
             TimePickerDialog timePickerDialog;
@@ -118,7 +96,7 @@ public class FilterDialogFragment extends DialogFragment {
             timePickerDialog = new
                     TimePickerDialog(requireActivity(),
                     android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                    timeSetListener, lastSelectedHour, lastSelectedMinute, true);// ou false avec am et pm
+                    timeSetListener, lastSelectedHour, lastSelectedMinute, true);
 
             if (hasFocus) {
                 timePickerDialog.show();
@@ -194,7 +172,7 @@ public class FilterDialogFragment extends DialogFragment {
         this.mCallBack = (OnPositiveButtonClickListener) getActivity();
     }
 
-    @Override//todo test
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         createCallBack();

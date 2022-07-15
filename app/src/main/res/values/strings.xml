@@ -1,12 +1,10 @@
 <resources>
     <string name="app_name">Ma réu</string>
     <string name="attendees">Attendees</string>
-    <string name="room">Room</string>
-    <string name="time">Time</string>
-    <string name="topic">Topic</string>
+    <string name="room">Salle</string>
+    <string name="time">Heure</string>
+    <string name="topic">Sujet de la réunion</string>
     <string name="add">Add</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">SAVE</string>
     <string name="date">Date</string>
     <string name="e_mail_participant">E-mail participant</string>
@@ -39,4 +37,25 @@
         <item>justin.ptipeu@lamzone.com</item>
     </string-array>
 
+    <string name="meeting_details_time_today">Réunion prévue aujourd\'hui à %1$s</string>
+    <string name="meeting_details_time_now">Réunion en cours…</string>
+    <string name="meeting_details_time_done">Réunion terminée</string>
+    <string name="meeting_details_expected_date">Réunion prévue le %1$s/%2$s/%3$d à %4$s</string>
+    <string name="meeting_details_expected_tomorrow">Réunion prévue demain à %1$s</string>
+
+    <string name="create_meeting_topic_error">Veuiller choisir le sujet de la réunion</string>
+    <string name="create_meeting_room_error">Veuiller choisir la date de la réunion</string>
+    <string name="create_meeting_date_error">Veuiller choisir l\'heure de la réunion</string>
+    <string name="create_meeting_time_error">Veuiller choisir une salle de réunion</string>
+    <string name="create_meeting_participant_error">Veuiller ajouter 2 participants mininum</string>
+
+    <string name="create_meeting_with_success">Réunion créé !</string>
+    <string name="create_meeting_room_not_available">La salle de réunion choisi n\'est pas disponible !</string>
+
+    <string name="create_meeting">Créer une réunion</string>
+    <string name="meeting_detail">Details de la réunion</string>
+    <string name="participant">Participant:</string>
+    <string name="filter">filter</string>
+    <string name="chrono_filter">Chrono filter</string>
+    <string name="reset_filter">Reset filter</string>
 </resources>

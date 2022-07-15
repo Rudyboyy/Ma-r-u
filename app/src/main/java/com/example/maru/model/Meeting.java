@@ -1,5 +1,7 @@
 package com.example.maru.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,17 +18,17 @@ public class Meeting implements
 
     private MeetingRoom meetingRoom;
     private String meetingTopic;
-    private List<String> attendees; // todo ***
+    private List<String> attendees;
     private LocalTime mTime;
     private LocalDate mDate;
     private LocalDateTime mDateTime;
 
     private final SimpleDateFormat dateHourFormat =
-            new SimpleDateFormat("HH:mm", Locale.getDefault());//todo test metre dans utils
+            new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     public String formatterDateHour(LocalTime date) {
         return date.format(DateTimeFormatter.ofPattern("HH:mm"));
-    } //todo test metre dans utils
+    }
 
     public String getMeetingTopic() {
         return meetingTopic;
@@ -46,11 +48,11 @@ public class Meeting implements
 
     public List<String> getAttendees() {
         return attendees;
-    }// todo ***
+    }
 
     public void setAttendees(ArrayList<String> attendees) {
         this.attendees = attendees;
-    }// todo ***
+    }
 
     public String getStringTime() {
         return formatterDateHour(mTime);
@@ -81,7 +83,7 @@ public class Meeting implements
     }
 
 
-    public Meeting(String topic, LocalTime time, LocalDate date, MeetingRoom room, List<String> attendees) {// todo ***
+    public Meeting(String topic, LocalTime time, LocalDate date, MeetingRoom room, List<String> attendees) {
 
         this.meetingTopic = topic;
         this.meetingRoom = room;
@@ -91,39 +93,16 @@ public class Meeting implements
         this.mDateTime = LocalDateTime.of(date, time);
     }
 
- /*   public String getAttendeesNames() {// todo ***
-        String result = "";
-        for(Employee attendee : attendees) {
-            result += attendee.getMail()+", ";
-        }
-        return result;
-    }*/
-
-    public String getRoomsNames() {//todo rajout
-        String result = "";
-        for (MeetingRoom rooms : MeetingRoom.values()) {
-            result += rooms.getName();
-        }
-        return result;
-    }
-
-/*    public String getAttendeesNames() { //todo celui-ci ???
-        StringBuilder result = new StringBuilder();
-        for(Employee attendee : attendees) {
-            result.append(attendee.getMail()).append(", ");
-        }
-        return result.toString();
-    }*/
-
+    @NonNull
     @Override
     public String toString() {
         return "Meeting{" +
                 "meetingRoom=" + meetingRoom +
                 ", meetingTopic='" + meetingTopic + '\'' +
                 ", attendees=" + attendees +
-                ", mDateTime=" + mDateTime +
                 ", mTime=" + mTime +
                 ", mDate=" + mDate +
+                ", mDateTime=" + mDateTime +
                 ", dateHourFormat=" + dateHourFormat +
                 '}';
     }

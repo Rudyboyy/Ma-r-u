@@ -111,11 +111,6 @@ public class ExampleUnitTest {
         assertEquals(MeetingRoom.AHRI, service.getMeetingRoomByName("ahri"));
     }
 
-/*    @Test
-    public void getMeetingsInChronologicalOrderWithSuccess() {
-
-    }*/
-
     @Test
     public void getMeetingByFilterWithSuccess() {
         Meeting meetingExpected = new Meeting("test", LocalTime.of(1,0),
@@ -215,7 +210,7 @@ public class ExampleUnitTest {
 
     @Test
     public void checkMeetingRoomIsAvailableWithSuccess() {
-        Meeting meeting = new Meeting("Réunion B" , LocalTime.of(11,  0), LocalDate.now(),
+        Meeting meeting = new Meeting("Réunion B" , LocalTime.of(8,  0), LocalDate.now(),
                 AKALI , Arrays.asList(DUMMY_EMPLOYEE.get(1).getMail(), DUMMY_EMPLOYEE.get(2).getMail()));
         Meeting newMeeting = new Meeting("test", LocalTime.of(1,0),
                 LocalDate.now().plusDays(10), MeetingRoom.AHRI, Arrays.asList("t", "test"));
