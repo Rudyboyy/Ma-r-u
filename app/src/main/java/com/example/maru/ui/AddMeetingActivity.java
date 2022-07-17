@@ -53,8 +53,6 @@ public class AddMeetingActivity extends AppCompatActivity {
         initDate();
         initRoomsSpinner();
         setSaveButton();
-
-
     }
 
     @Override
@@ -103,7 +101,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 binding.textFieldAttendees.setError(getString(R.string.create_meeting_participant_error));
                 return;
             } else binding.textFieldAttendees.setError(null);
-
 
             Meeting meeting = new Meeting(
                     mTopic,
