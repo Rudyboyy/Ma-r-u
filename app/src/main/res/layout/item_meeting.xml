@@ -65,8 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="11sp"
-            app:layout_constraintEnd_toStartOf="@+id/item_list_delete_button"
-            app:layout_constraintStart_toEndOf="@+id/item_list_meeting_info"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="12/09/1997" />
 

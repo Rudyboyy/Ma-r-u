@@ -83,6 +83,13 @@ public class DetailMeetingActivity extends AppCompatActivity {
         binding.itemListAvatar.setImageResource(meeting.getMeetingRoom().getIconRes());
         binding.topic.setText(meeting.getMeetingTopic());
         binding.stateMeeting.setText(setMeetingState(meeting));
-        binding.attendeesMail.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));
+        StringBuilder attendeesString = new StringBuilder();
+        for (int i = 0; i<meeting.getAttendees().size(); i++) {
+            attendeesString.append(meeting.getAttendees().get(i));
+            if (i<meeting.getAttendees().size() -1) {
+                attendeesString.append(", ");
+            } else attendeesString.append(".");
+        }
+        binding.attendeesMail.setText(attendeesString);
     }
 }

@@ -6,6 +6,7 @@ import static com.example.maru.ui.MainActivity.MEETING_INFO;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,10 +94,20 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             if (meeting.getDate().getDayOfMonth() < 10) {
                 finalDay = "0" + finalDay;
             }
+
             avatar.setImageResource(meeting.getMeetingRoom().getIconRes());
             date.setText(finalDay + "/" + finalMonth + "/" + meeting.getDate().getYear());
+            Log.v("test", meeting.getMeetingRoom() + " " + meeting.getDate().toString());
             meetingInfo.setText(meeting.getMeetingTopic() + " - " + meeting.getStringTime() + " - " + meeting.getMeetingRoom());
-            attendees.setText(meeting.getAttendees().toString().replace("[", "").replace("]", ""));
+
+            StringBuilder attendeesString = new StringBuilder();
+            for (int i = 0; i<meeting.getAttendees().size(); i++) {
+                attendeesString.append(meeting.getAttendees().get(i));
+                if (i<meeting.getAttendees().size() -1) {
+                    attendeesString.append(", ");
+                } else attendeesString.append(".");
+            }
+            attendees.setText(attendeesString);
         }
     }
 }

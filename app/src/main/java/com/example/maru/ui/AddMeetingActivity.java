@@ -146,6 +146,9 @@ public class AddMeetingActivity extends AppCompatActivity {
                 binding.textDate.setText(dateString);
                 mDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             }, mYear, mMonth, mDay);
+
+            datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+
             if (hasFocus) {
                 datePickerDialog.show();
             } else datePickerDialog.dismiss();
