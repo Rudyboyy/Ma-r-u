@@ -1,25 +1,38 @@
 package com.example.maru.service;
 
+import static com.example.maru.model.Employee.DUMMY_EMPLOYEE;
+import static com.example.maru.model.MeetingRoom.AHRI;
+import static com.example.maru.model.MeetingRoom.AKALI;
+import static com.example.maru.model.MeetingRoom.DARIUS;
+import static com.example.maru.model.MeetingRoom.DRAVEN;
+import static com.example.maru.model.MeetingRoom.GRAVE;
+import static com.example.maru.model.MeetingRoom.ILLAOI;
+import static com.example.maru.model.MeetingRoom.PYKE;
+import static com.example.maru.model.MeetingRoom.SION;
+import static com.example.maru.model.MeetingRoom.YASUO;
+
 import com.example.maru.model.Meeting;
 
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public  abstract class DummyMeetingGenerator {
+public abstract class DummyMeetingGenerator {
+
 
     public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
-            new Meeting(1, "Réunion A" ,new Time(10, 0,0), "Akali", "eddy.moitout@lamzone.com"),
-            new Meeting(2, "Réunion B" ,new Time(11,0,0), "Yasuo", "thibault.monfils@lamzone.com"),
-            new Meeting(3, "Réunion C" ,new Time(12,0,0), "Sion", "jessica.pote@lamzone.com"),
-            new Meeting(4, "Réunion D" ,new Time(13,0,0), "Illaoi", "marie.rouana@lamzone.com"),
-            new Meeting(5, "Réunion E" ,new Time(14,0,0), "Ahri", "sarah.croche@lamzone.com"),
-            new Meeting(6, "Réunion F" ,new Time(15,0,0), "Pike", "brice.glace@lamzone.com"),
-            new Meeting(7, "Réunion G" ,new Time(16,0,0), "Draven", "alain.proviste@lamzone.com"),
-            new Meeting(8, "Réunion H" ,new Time(17,0,0), "Darius", "cecile.onxa@lamzone.com"),
-            new Meeting(9, "Réunion I" ,new Time(18,0,0), "Grave", "oussama.lairbizar@lamzone.com"),
-            new Meeting(10, "Réunion J" ,new Time(19,0,0), "Riven", "justin.ptipeu@lamzone.com")
+            new Meeting("Réunion A", LocalTime.of(10, 0), LocalDate.now().plusDays(1), AHRI, Arrays.asList(DUMMY_EMPLOYEE.get(0).getMail(), DUMMY_EMPLOYEE.get(1).getMail())),
+            new Meeting("Réunion B", LocalTime.now(), LocalDate.now(), PYKE, Arrays.asList(DUMMY_EMPLOYEE.get(1).getMail(), DUMMY_EMPLOYEE.get(2).getMail())),
+            new Meeting("Réunion C", LocalTime.of(12, 0), LocalDate.now().minusDays(1), YASUO, Arrays.asList(DUMMY_EMPLOYEE.get(3).getMail(), DUMMY_EMPLOYEE.get(5).getMail())),
+            new Meeting("Réunion D", LocalTime.of(8, 0), LocalDate.now().plusDays(2), SION, Arrays.asList(DUMMY_EMPLOYEE.get(6).getMail(), DUMMY_EMPLOYEE.get(9).getMail())),
+            new Meeting("Réunion E", LocalTime.of(23, 59), LocalDate.now(), DARIUS, Arrays.asList(DUMMY_EMPLOYEE.get(0).getMail(), DUMMY_EMPLOYEE.get(9).getMail())),
+            new Meeting("Réunion F", LocalTime.of(15, 0), LocalDate.now(), GRAVE, Arrays.asList(DUMMY_EMPLOYEE.get(2).getMail(), DUMMY_EMPLOYEE.get(4).getMail())),
+            new Meeting("Réunion G", LocalTime.of(16, 0), LocalDate.now(), DRAVEN, Arrays.asList(DUMMY_EMPLOYEE.get(4).getMail(), DUMMY_EMPLOYEE.get(7).getMail())),
+            new Meeting("Réunion H", LocalTime.of(17, 0), LocalDate.now(), ILLAOI, Arrays.asList(DUMMY_EMPLOYEE.get(5).getMail(), DUMMY_EMPLOYEE.get(8).getMail())),
+            new Meeting("Réunion I", LocalTime.of(9, 0), LocalDate.now(), YASUO, Arrays.asList(DUMMY_EMPLOYEE.get(7).getMail(), DUMMY_EMPLOYEE.get(2).getMail())),
+            new Meeting("Réunion J", LocalTime.of(8, 0), LocalDate.now(), AKALI, Arrays.asList(DUMMY_EMPLOYEE.get(8).getMail(), DUMMY_EMPLOYEE.get(1).getMail()))
     );
 
     static List<Meeting> generateMeetings() {

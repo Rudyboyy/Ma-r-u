@@ -1,64 +1,116 @@
 package com.example.maru.model;
 
-import java.sql.Time;
+import androidx.annotation.NonNull;
 
-public class Meeting {
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-    private final long id;
-    String MeetingTopic, MeetingRoom, Attendees;
-    Time mTime;
+public class Meeting implements
+        Serializable,
+        Comparable<Meeting> {
 
-    public long getId() {
-        return id;
+    private MeetingRoom meetingRoom;
+    private String meetingTopic;
+    private List<String> attendees;
+    private LocalTime mTime;
+    private LocalDate mDate;
+    private LocalDateTime mDateTime;
+
+    private final SimpleDateFormat dateHourFormat =
+            new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+    public String formatterDateHour(LocalTime date) {
+        return date.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public String getMeetingTopic() {
-        return MeetingTopic;
+        return meetingTopic;
     }
 
     public void setMeetingTopic(String meetingTopic) {
-        MeetingTopic = meetingTopic;
+        this.meetingTopic = meetingTopic;
     }
 
-    public String getMeetingRoom() {
-        return MeetingRoom;
+    public MeetingRoom getMeetingRoom() {
+        return meetingRoom;
     }
 
-    public void setMeetingRoom(String meetingRoom) {
-        MeetingRoom = meetingRoom;
+    public void setMeetingRoom(MeetingRoom meetingRoom) {
+        this.meetingRoom = meetingRoom;
     }
 
-    public String getAttendees() {
-        return Attendees;
+    public List<String> getAttendees() {
+        return attendees;
     }
 
-    public void setAttendees(String attendees) {
-        Attendees = attendees;
+    public void setAttendees(ArrayList<String> attendees) {
+        this.attendees = attendees;
     }
 
-    public Time getTime() {
+    public String getStringTime() {
+        return formatterDateHour(mTime);
+    }
+
+    public LocalTime getTime() {
         return mTime;
     }
 
-    public void setTime(Time time) {
+    public void setDate(LocalDate date) {
+        mDate = date;
+    }
+
+    public LocalDateTime getDateTime() {
+        return mDateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        mDateTime = dateTime;
+    }
+
+    public LocalDate getDate() {
+        return mDate;
+    }
+
+    public void setTime(LocalTime time) {
         mTime = time;
     }
 
-    public Meeting(long id, String topic, String room, String attendees) {
 
-        this.id = id;
-        this.MeetingTopic = topic;
-        this.MeetingRoom = room;
-        this.Attendees = attendees;
-//        this.mTime = new Time();
+    public Meeting(String topic, LocalTime time, LocalDate date, MeetingRoom room, List<String> attendees) {
+
+        this.meetingTopic = topic;
+        this.meetingRoom = room;
+        this.attendees = attendees;
+        this.mDate = date;
+        this.mTime = time;
+        this.mDateTime = LocalDateTime.of(date, time);
     }
 
-    public Meeting(long id, String topic, Time time, String room, String attendees) {
+    @NonNull
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "meetingRoom=" + meetingRoom +
+                ", meetingTopic='" + meetingTopic + '\'' +
+                ", attendees=" + attendees +
+                ", mTime=" + mTime +
+                ", mDate=" + mDate +
+                ", mDateTime=" + mDateTime +
+                ", dateHourFormat=" + dateHourFormat +
+                '}';
+    }
 
-        this.id = id;
-        this.MeetingTopic = topic;
-        this.MeetingRoom = room;
-        this.Attendees = attendees;
-        mTime = time;
+    @Override
+    public int compareTo(Meeting meeting) {
+        if (getDateTime() == null || meeting.getDateTime() == null)
+            return 0;
+        return getDateTime().compareTo(meeting.getDateTime());
     }
 }

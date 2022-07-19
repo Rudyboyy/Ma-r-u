@@ -1,5 +1,12 @@
 package com.example.maru.ui;
 
+
+import static com.example.maru.ui.MainActivity.MEETING_INFO;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +18,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maru.R;
-import com.example.maru.di.DI;
 import com.example.maru.model.Meeting;
-import com.example.maru.service.MeetingApiService;
 
 import java.util.ArrayList;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
 
-    private final ArrayList<Meeting> mMeetings;
-    private final MeetingApiService mMeetingApiService = DI.getMeetingApiService();
+    private ArrayList<Meeting> mMeetings;
+    private final IOnMeetingDeleted deleteMeeting;
+    private final Context mContext;
 
-    public MeetingAdapter(ArrayList<Meeting> meetings) {
+    public MeetingAdapter(ArrayList<Meeting> meetings, IOnMeetingDeleted deleteMeeting, Context context) {
+        this.mContext = context;
         this.mMeetings = meetings;
+        this.deleteMeeting = deleteMeeting;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        mMeetings = meetings;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -36,8 +50,16 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.displayMeeting(mMeetings.get(position));
-        holder.deleteButton.setOnClickListener(view -> mMeetingApiService.deleteMeeting(mMeetings.get(position)));//todo fonctionne pas
+        Meeting meeting = mMeetings.get(position);
+        holder.displayMeeting(meeting);
+
+        holder.deleteButton.setOnClickListener(view -> deleteMeeting.onDeleteMeeting(meeting));
+
+        holder.itemView.setOnClickListener(view -> {
+            Intent detailMeetingActivityIntent = new Intent(mContext, DetailMeetingActivity.class);
+            detailMeetingActivityIntent.putExtra(MEETING_INFO, meeting);
+            mContext.startActivity(detailMeetingActivityIntent);
+        });
     }
 
     @Override
@@ -51,6 +73,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         public final TextView meetingInfo;
         public final TextView attendees;
         public final ImageButton deleteButton;
+        public final TextView date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,12 +81,33 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             this.meetingInfo = itemView.findViewById(R.id.item_list_meeting_info);
             this.attendees = itemView.findViewById(R.id.item_list_attendees);
             this.deleteButton = itemView.findViewById(R.id.item_list_delete_button);
+            this.date = itemView.findViewById(R.id.item_list_date);
         }
 
+        @SuppressLint("SetTextI18n")
         public void displayMeeting(Meeting meeting) {
-//            SimpleTimeZone simpleTimeZone = new SimpleTimeZone()
-            meetingInfo.setText(meeting.getMeetingTopic()+" - "+meeting.getTime()+" - "+meeting.getMeetingRoom());
-            attendees.setText(meeting.getAttendees());
+            String finalMonth = "" + meeting.getDate().getMonthValue();
+            String finalDay = "" + meeting.getDate().getDayOfMonth();
+            if (meeting.getDate().getMonthValue() < 10) {
+                finalMonth = "0" + finalMonth;
+            }
+            if (meeting.getDate().getDayOfMonth() < 10) {
+                finalDay = "0" + finalDay;
+            }
+
+            avatar.setImageResource(meeting.getMeetingRoom().getIconRes());
+            date.setText(finalDay + "/" + finalMonth + "/" + meeting.getDate().getYear());
+            Log.v("test", meeting.getMeetingRoom() + " " + meeting.getDate().toString());
+            meetingInfo.setText(meeting.getMeetingTopic() + " - " + meeting.getStringTime() + " - " + meeting.getMeetingRoom());
+
+            StringBuilder attendeesString = new StringBuilder();
+            for (int i = 0; i<meeting.getAttendees().size(); i++) {
+                attendeesString.append(meeting.getAttendees().get(i));
+                if (i<meeting.getAttendees().size() -1) {
+                    attendeesString.append(", ");
+                } else attendeesString.append(".");
+            }
+            attendees.setText(attendeesString);
         }
     }
 }

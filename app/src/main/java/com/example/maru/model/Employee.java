@@ -1,15 +1,32 @@
 package com.example.maru.model;
 
-public enum Employee {
+import java.util.Arrays;
+import java.util.List;
 
-/*    Eddy("eddy.moitout@lamzone.com"),
-    Thibault("thibault.monfils@lamzone.com"),
-    Jessica("jessica.pote@lamzone.com"),
-    Marie("marie.rouana@lamzone.com"),
-    Sarah("sarah.croche@lamzone.com"),
-    Brice("brice.glace@lamzone.com"),
-    Alain("alain.proviste@lamzone.com"),
-    Cecile("cecile.onxa@lamzone.com"),
-    Oussama("oussama.lairbizar@lamzone.com"),
-    Justin("justin.ptipeu@lamzone.com");*/
+public class Employee {
+
+    private final String mail;
+
+    public Employee(String mail) {
+        this.mail = mail;
+    }
+
+    public static List<Employee> DUMMY_EMPLOYEE = Arrays.asList(
+            new Employee("eddy.moitout@lamzone.com"),
+            new Employee("thibault.monfils@lamzone.com"),
+            new Employee("jessica.pote@lamzone.com"),
+            new Employee("marie.rouana@lamzone.com"),
+            new Employee("sarah.croche@lamzone.com"),
+            new Employee("brice.glace@lamzone.com"),
+            new Employee("alain.proviste@lamzone.com"),
+            new Employee("cecile.onxa@lamzone.com"),
+            new Employee("oussama.lairbizar@lamzone.com"),
+            new Employee("justin.ptipeu@lamzone.com"));
+
+    public String getMail() {
+        return mail;
+    }
+
+
 }
+

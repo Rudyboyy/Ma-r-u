@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu">
+
+    <item
+        android:id="@+id/reset_filter"
+        android:title="@string/reset_filter"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/chrono_filter"
+        android:title="@string/chrono_filter"
+        android:icon="@drawable/ic_baseline_sort_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/filter"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        app:showAsAction="ifRoom" />
+
+</menu>
